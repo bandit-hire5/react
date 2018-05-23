@@ -28,10 +28,32 @@ const BoardRow = styled.div`
 `;
 
 const ButtonMoving = styled.button`
-    font-weight: normal;
+    border-radius: 3px;
+    padding: 0.25em 1em;
+    margin: 0.1em 1em;
+    background: transparent;
+    color: palevioletred;
+    border: 2px solid palevioletred;
+    cursor: pointer;
     
     ${props => props.current && css`
-        font-weight: bold;
+        background: palevioletred;
+        color: white;
+    `}
+`;
+
+const ButtonSort = styled.button`
+    border-radius: 3px;
+    padding: 0.25em 1em;
+    margin: 0.1em 1em;
+    background: transparent;
+    color: palevioletred;
+    border: 2px solid palevioletred;
+    cursor: pointer;
+    
+    ${props => props.current && css`
+        background: palevioletred;
+        color: white;
     `}
 `;
 
@@ -42,6 +64,7 @@ const GameStatus = styled.div`
 export {
     ButtonSquare,
     ButtonMoving,
+    ButtonSort,
     BoardRow,
     GameStatus,
 };

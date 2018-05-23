@@ -1,5 +1,5 @@
 import React, {PureComponent} from "react";
-import {ButtonMoving, GameStatus} from './styles/game';
+import {ButtonMoving, GameStatus, ButtonSort} from './styles/game';
 import Board from "./Board";
 import {calculateWinner} from "./Winner";
 import getPosition from "./Position";
@@ -55,7 +55,7 @@ class Game extends PureComponent {
                 <div className="game-info">
                     <GameStatus>{status}</GameStatus>
                     <div>
-                        <button onClick={() => this.sortHistory()}>Sort</button>
+                        <ButtonSort onClick={() => this.sortHistory()}>Sort</ButtonSort>
                     </div>
                     <ol>{moves}</ol>
                 </div>
@@ -71,17 +71,9 @@ class Game extends PureComponent {
                 'Go to move #' + move + ' (position: ' + step.position + ')' :
                 'Go to game start';
 
-            if (move === this.state.stepNumber) {
-                return (
-                    <li key={move}>
-                        <ButtonMoving current onClick={() => this.jumpTo(move)}>{desc}</ButtonMoving>
-                    </li>
-                );
-            }
-
             return (
                 <li key={move}>
-                    <ButtonMoving onClick={() => this.jumpTo(move)}>{desc}</ButtonMoving>
+                    <ButtonMoving current={move === this.state.stepNumber} onClick={() => this.jumpTo(move)}>{desc}</ButtonMoving>
                 </li>
             );
         });
