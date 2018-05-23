@@ -1,31 +1,31 @@
 import React, {PureComponent} from "react";
-import Square from "./Square.js";
+import Square from "./Square";
+import {BoardRow} from './styles/game';
 
 class Board extends PureComponent {
     renderSquare(i) {
-        return <Square value={ this.props.squares[i] } isWinner={this.props.winners[i]} onClick={() => this.props.onClick(i)} />;
+        return (
+            <Square
+                key={i}
+                value={ this.props.squares[i] }
+                isWinner={this.props.winners[i]}
+                onClick={() => this.props.onClick(i)}
+            />
+        );
     }
 
     render() {
         return (
             <div>
-                <div className="board-row">
-                    { this.renderSquare(0) }
-                    { this.renderSquare(1) }
-                    { this.renderSquare(2) }
-                </div>
-
-                <div className="board-row">
-                    { this.renderSquare(3) }
-                    { this.renderSquare(4) }
-                    { this.renderSquare(5) }
-                </div>
-
-                <div className="board-row">
-                    { this.renderSquare(6) }
-                    { this.renderSquare(7) }
-                    { this.renderSquare(8) }
-                </div>
+                {Array(3).fill(null).map((row, i) => {
+                    return (
+                        <BoardRow key={i}>
+                            {Array(3).fill(null).map((square, y) => {
+                                return this.renderSquare(i * 3 + y);
+                            })}
+                        </BoardRow>
+                    );
+                })}
             </div>
         );
     }

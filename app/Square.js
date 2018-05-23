@@ -1,10 +1,15 @@
 import React from "react";
+import {ButtonSquare} from './styles/game';
 
 function Square(props) {
+    if (props.isWinner) {
+        return (
+            <ButtonSquare winner onClick={props.onClick}>{props.value}</ButtonSquare>
+        );
+    }
+
     return (
-        <button className={props.isWinner ? 'square winner' : 'square'} onClick={props.onClick}>
-            {props.value}
-        </button>
+        <ButtonSquare onClick={props.onClick}>{props.value}</ButtonSquare>
     );
 }
 

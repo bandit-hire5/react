@@ -1,19 +1,23 @@
 import React, {PureComponent} from "react";
-import "./Game.css";
-import Board from "./Board.js";
-import {calculateWinner, getWinner} from "./Winner.js";
-import getPosition from "./Position.js";
+import {ButtonMoving, GameStatus} from './styles/game';
+import Board from "./Board";
+import {calculateWinner, getWinner} from "./Winner";
+import getPosition from "./Position";
 
 class Game extends PureComponent {
     constructor(props) {
         super(props);
 
+        const winners = Array(9).fill(false);
+
         this.state = {
             history: [{
+                sort: 0,
                 squares: Array(9).fill(null),
                 position: null,
+                winners: winners,
             }],
-            winners: Array(9).fill(false),
+            winners: winners,
             sortHistory: 'asc',
             stepNumber: 0,
             xIsNext: true,
@@ -22,33 +26,20 @@ class Game extends PureComponent {
     }
 
     render() {
-        const history = this.state.history;
+        let history = this.state.history.slice();
+
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares);
-        const endDraw = this.state.endDraw;
 
-        const moves = history.map((step, move) => {
-            const desc = move ?
-                'Go to move #' + move + ' (position: ' + step.position + ')' :
-                'Go to game start';
-            const buttonStyle = {
-                fontWeight: move === this.state.stepNumber ? 'bold' : 'normal',
-            };
+        if (this.state.sortHistory === 'desc') {
+            history = history.reverse();
+        }
 
-            return (
-                <li key={move}>
-                    <button style={buttonStyle} onClick={() => this.jumpTo(move)}>{desc}</button>
-                </li>
-            );
-        });
-
-        const sortBtn = (
-            <button onClick={() => this.sortHistory()}>Sort</button>
-        );
+        const moves = this.getMoves(history);
 
         let status;
 
-        if (endDraw) {
+        if (this.state.endDraw) {
             status = 'Result: draw';
         } else if (winner) {
             status = 'Winner: ' + winner;
@@ -67,18 +58,45 @@ class Game extends PureComponent {
                 </div>
 
                 <div className="game-info">
-                    <div>{status}</div>
-                    <ol>{sortBtn}</ol>
+                    <GameStatus>{status}</GameStatus>
+                    <div>
+                        <button onClick={() => this.sortHistory()}>Sort</button>
+                    </div>
                     <ol>{moves}</ol>
                 </div>
             </div>
         );
     }
 
+    getMoves(history) {
+        return history.map((step) => {
+            const move = step.sort;
+
+            const desc = move ?
+                'Go to move #' + move + ' (position: ' + step.position + ')' :
+                'Go to game start';
+
+            if (move === this.state.stepNumber) {
+                return (
+                    <li key={move}>
+                        <ButtonMoving current onClick={() => this.jumpTo(move)}>{desc}</ButtonMoving>
+                    </li>
+                );
+            }
+
+            return (
+                <li key={move}>
+                    <ButtonMoving onClick={() => this.jumpTo(move)}>{desc}</ButtonMoving>
+                </li>
+            );
+        });
+    }
+
     jumpTo(step) {
         const history = this.state.history;
         const current = history[step];
         const squares = current.squares.slice();
+        const winners = current.winners.slice();
 
         let endDraw = squares.every((value) => {
             return value;
@@ -88,6 +106,7 @@ class Game extends PureComponent {
             stepNumber: step,
             xIsNext: (step % 2) === 0,
             endDraw: endDraw,
+            winners: winners,
         });
     }
 
@@ -118,14 +137,16 @@ class Game extends PureComponent {
             });
         }
 
-        let endDraw = squares.every((value) => {
+        const endDraw = squares.every((value) => {
             return value;
         });
 
         this.setState({
             history: history.concat([{
+                sort: current.sort + 1,
                 squares: squares,
                 position: getPosition(i),
+                winners: winners,
             }]),
             winners: winners,
             stepNumber: history.length,
