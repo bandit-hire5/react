@@ -1,23 +1,24 @@
 import React, {PureComponent} from "react";
 import {ButtonMoving, GameStatus, ButtonSort} from './styles/game';
 import Board from "./Board";
-import {calculateWinner} from "./Winner";
-import getPosition from "./Position";
+import {calculateWinner} from "./funcs/winner";
+import getPosition from "./funcs/position";
 
 class Game extends PureComponent {
     constructor(props) {
         super(props);
 
         this.state = {
-            history: [{
-                sort: 0,
-                squares: Array(9).fill(null),
-                position: null,
-            }],
+            history: [
+                {
+                    sort: 0,
+                    squares: Array(9).fill(null),
+                    position: null,
+                }
+            ],
             sortHistory: 'asc',
             stepNumber: 0,
             xIsNext: true,
-            endDraw: false,
         };
     }
 
@@ -32,16 +33,15 @@ class Game extends PureComponent {
         }
 
         const moves = this.getMoves(history);
+        const isEnded = current.squares.every((value) => {
+            return value;
+        });
 
-        let status;
-
-        if (this.state.endDraw) {
-            status = 'Result: draw';
-        } else if (winner) {
-            status = 'Winner: ' + winner;
-        } else {
-            status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
-        }
+        let status = isEnded ?
+            'Result: draw' :
+            winner ?
+                'Winner: ' + winner :
+                'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
 
         return (
             <div className="game">
@@ -84,14 +84,9 @@ class Game extends PureComponent {
         const current = history[step];
         const squares = current.squares.slice();
 
-        let endDraw = squares.every((value) => {
-            return value;
-        });
-
         this.setState({
             stepNumber: step,
             xIsNext: (step % 2) === 0,
-            endDraw: endDraw,
         });
     }
 
@@ -112,19 +107,16 @@ class Game extends PureComponent {
 
         squares[i] = this.state.xIsNext ? 'X' : 'O';
 
-        const endDraw = squares.every((value) => {
-            return value;
-        });
-
         this.setState({
-            history: history.concat([{
-                sort: current.sort + 1,
-                squares: squares,
-                position: getPosition(i),
-            }]),
+            history: history.concat([
+                {
+                    sort: current.sort + 1,
+                    squares: squares,
+                    position: getPosition(i),
+                }
+            ]),
             stepNumber: history.length,
             xIsNext: !this.state.xIsNext,
-            endDraw: endDraw,
         });
     }
 }

@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import Square from "./Square";
 import {BoardRow} from './styles/game';
-import {calculateWinner, getWinner} from "./Winner";
+import {calculateWinner, getWinner} from "./funcs/winner";
 
 class Board extends Component {
     getWinners() {
@@ -22,7 +22,7 @@ class Board extends Component {
         return (
             <Square
                 key={i}
-                value={ this.props.squares[i] }
+                value={this.props.squares[i]}
                 isWinner={winners[i]}
                 onClick={() => this.props.onClick(i)}
             />
