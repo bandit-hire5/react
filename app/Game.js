@@ -1,23 +1,19 @@
 import React, {PureComponent} from "react";
 import {ButtonMoving, GameStatus} from './styles/game';
 import Board from "./Board";
-import {calculateWinner, getWinner} from "./Winner";
+import {calculateWinner} from "./Winner";
 import getPosition from "./Position";
 
 class Game extends PureComponent {
     constructor(props) {
         super(props);
 
-        const winners = Array(9).fill(false);
-
         this.state = {
             history: [{
                 sort: 0,
                 squares: Array(9).fill(null),
                 position: null,
-                winners: winners,
             }],
-            winners: winners,
             sortHistory: 'asc',
             stepNumber: 0,
             xIsNext: true,
@@ -52,7 +48,6 @@ class Game extends PureComponent {
                 <div className="game-board">
                     <Board
                         squares={current.squares}
-                        winners={this.state.winners}
                         onClick={(i) => this.handleClick(i)}
                     />
                 </div>
@@ -96,7 +91,6 @@ class Game extends PureComponent {
         const history = this.state.history;
         const current = history[step];
         const squares = current.squares.slice();
-        const winners = current.winners.slice();
 
         let endDraw = squares.every((value) => {
             return value;
@@ -106,7 +100,6 @@ class Game extends PureComponent {
             stepNumber: step,
             xIsNext: (step % 2) === 0,
             endDraw: endDraw,
-            winners: winners,
         });
     }
 
@@ -127,16 +120,6 @@ class Game extends PureComponent {
 
         squares[i] = this.state.xIsNext ? 'X' : 'O';
 
-        let winners = this.state.winners.slice();
-
-        if (calculateWinner(squares)) {
-            const winnerList = getWinner();
-
-            winners = squares.map((item, i) => {
-                return winnerList.indexOf(i) >= 0;
-            });
-        }
-
         const endDraw = squares.every((value) => {
             return value;
         });
@@ -146,9 +129,7 @@ class Game extends PureComponent {
                 sort: current.sort + 1,
                 squares: squares,
                 position: getPosition(i),
-                winners: winners,
             }]),
-            winners: winners,
             stepNumber: history.length,
             xIsNext: !this.state.xIsNext,
             endDraw: endDraw,
