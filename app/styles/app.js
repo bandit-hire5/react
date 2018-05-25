@@ -1,70 +1,70 @@
 import styled, {css} from 'styled-components';
 
-const ButtonSquare = styled.button`
-    background: #fff;
-    border: 1px solid #999;
-    float: left;
-    font-size: 24px;
-    font-weight: bold;
-    line-height: 34px;
-    height: 34px;
-    margin-right: -1px;
-    margin-top: -1px;
-    padding: 0;
-    text-align: center;
-    width: 34px;
+const StatusDiv = styled.div`
+    display: none;
     
-    ${props => props.winner && css`
-        background: #00ff00;
+    ${props => props.show && css`
+        display: flex;
+        height: inherit;
+        align-items: center;
+        justify-content: center;
+        
+        &>span {
+            margin: 0;
+        }
     `}
 `;
 
-const BoardRow = styled.div`
-    &:after {
-        clear: both;
-        content: "";
-        display: table;
+const PersonList = styled.ul`
+    list-style: none;
+`;
+
+const BlockDiv = styled.div`
+    width: 400px;
+    overflow: hidden;
+    min-height: 300px;
+    height: 300px;
+    position: relative;
+    float: left;
+`;
+
+const ActionDiv = styled.div`
+    width: 400px;
+    overflow: hidden;
+`;
+
+const PageButton = styled.button`
+    ${props => props.left && css`
+        float: left;
+        margin-left: 10px;
+    `}
+
+    ${props => props.right && css`
+        float: right;
+        margin-right: 10px;
+    `}
+`;
+
+const PersonLink = styled.a`
+    &:hover {
+        font-weight: bold;
+        cursor: pointer;
     }
 `;
 
-const ButtonMoving = styled.button`
-    border-radius: 3px;
-    padding: 0.25em 1em;
-    margin: 0.1em 1em;
-    background: transparent;
-    color: palevioletred;
-    border: 2px solid palevioletred;
-    cursor: pointer;
-    
-    ${props => props.current && css`
-        background: palevioletred;
-        color: white;
-    `}
-`;
-
-const ButtonSort = styled.button`
-    border-radius: 3px;
-    padding: 0.25em 1em;
-    margin: 0.1em 1em;
-    background: transparent;
-    color: palevioletred;
-    border: 2px solid palevioletred;
-    cursor: pointer;
-    
-    ${props => props.current && css`
-        background: palevioletred;
-        color: white;
-    `}
-`;
-
-const GameStatus = styled.div`
-    margin: 10px 0;
+const ShipLi = styled.li`
+    &:hover {
+        font-weight: bold;
+        cursor: pointer;
+    }
 `;
 
 export {
-    ButtonSquare,
-    ButtonMoving,
-    ButtonSort,
-    BoardRow,
-    GameStatus,
+    PersonList,
+    BlockDiv,
+    StatusDiv,
+    ActionDiv,
+    PageButton,
+    PersonLink,
+    ShipLi,
 };
