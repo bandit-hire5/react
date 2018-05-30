@@ -4,7 +4,7 @@ import Board from "./Board";
 import {calculateWinner} from "./funcs/winner";
 import getPosition from "./funcs/position";
 
-class Game extends PureComponent {
+class Main extends PureComponent {
     constructor(props) {
         super(props);
 
@@ -82,7 +82,6 @@ class Game extends PureComponent {
     jumpTo(step) {
         const history = this.state.history;
         const current = history[step];
-        const squares = current.squares.slice();
 
         this.setState({
             stepNumber: step,
@@ -121,4 +120,4 @@ class Game extends PureComponent {
     }
 }
 
-export default Game;
+export default Main;
