@@ -1,7 +1,5 @@
-import topics from './topics/reducer';
-import posts from './posts/reducer';
+import game from './game/reducer';
 
 export {
-    topics,
-    posts
+    game,
 };
