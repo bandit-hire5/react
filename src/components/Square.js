@@ -1,7 +1,8 @@
 import React from 'react';
+import {SquareBlock} from './Styles';
 
 export default function Square(props) {
     return (
-        <div className={props.selected ? "GameSquare selected" : "GameSquare"}></div>
+        <SquareBlock {...props}></SquareBlock>
     );
 }

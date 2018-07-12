@@ -37,3 +37,41 @@
     background: green;
     border-color: green;
 }
+
+.Controls {
+    position: absolute;
+    left: -300px;
+    width: 300px;
+}
+
+.Controls ul {
+    list-style: none;
+}
+
+.Controls ul li {
+    padding: 10px;
+    float: left;
+}
+
+.Controls ul li .action {
+    width: 50px;
+    background-color: #999999;
+    padding: 5px;
+    display: block;
+    float: left;
+}
+
+.Controls ul li .description {
+    padding: 5px 5px 5px 15px;
+    display: block;
+    float: left;
+
+}
+
+.nextFigure {
+    position: absolute;
+    width: 136px;
+    height: 136px;
+    right: -250px;
+    top: 50px;
+}

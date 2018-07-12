@@ -1,28 +1,48 @@
 import Immutable from 'seamless-immutable';
-import * as types from './actionTypes';
+import * as constants from '../../elements/const';
 
 const initialState = Immutable({
-    figure: false,
+    squares: [],
+    nextFigure: [],
+    isGameOver: false,
+    speed: 500,
 });
 
 export default function reduce(state = initialState, action = {}) {
     switch (action.type) {
-        case types.GAME_NEW_FIGURE:
-        case types.GAME_FIGURE_MOVE:
-        case types.GAME_FIGURE_REMOVE:
-            return state.merge({
-                figure: action.figure,
-            });
+        case constants.GAME_UPDATE:
+            return {
+                squares: action.squares,
+                nextFigure: action.nextFigure,
+                isGameOver: false,
+                speed: action.speed,
+            };
+
+        case constants.GAME_OVER:
+            return {
+                squares: [],
+                nextFigure: [],
+                isGameOver: true,
+                speed: 500,
+            };
 
         default:
             return state;
     }
 }
 
-export function getIsNewFigure(state) {
-    return !!state.game.figure;
+export function getSquares(state) {
+    return state.game.squares;
 }
 
-export function getFigure(state) {
-    return state.game.figure;
+export function getNextSquares(state) {
+    return state.game.nextFigure;
+}
+
+export function getGameStatus(state) {
+    return state.game.isGameOver;
+}
+
+export function getGameSpeed(state) {
+    return state.game.speed;
 }

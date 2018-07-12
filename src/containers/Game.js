@@ -1,10 +1,14 @@
 import React, {Component} from 'react';
 import autoBind from 'react-autobind';
 import {connect} from 'react-redux';
+import Square from '../components/Square';
+import GameOver from '../components/GameOver';
+import NextFigure from '../components/NextFigure';
+import Controls from '../components/Controls';
+
 import * as gameSelectors from '../store/game/reducer';
 import * as gameActions from '../store/game/actions';
 import './Game.css';
-import FigureWrapper from '../containers/FigureWrapper';
 
 class Game extends Component {
     constructor(props) {
@@ -14,30 +18,45 @@ class Game extends Component {
     }
 
     componentDidMount() {
-        this.props.dispatch(gameActions.newFigure());
+        this.startGame();
     }
 
-    componentDidUpdate(prevProps) {
-        if (prevProps.isNewFigure === true && this.props.isNewFigure === false) {
-            this.props.dispatch(gameActions.newFigure());
-        }
+    startGame() {
+        this.props.dispatch(gameActions.startGame({...this.props}));
     }
 
     render() {
         return (
-            <div className="Game">
-                {this.props.isNewFigure ?
-                    <FigureWrapper /> :
-                    null
-                }
+            <div>
+                <Controls speed={this.props.speed} />
+                <div className="Game">
+                    {this.props.isGameOver ?
+                        <GameOver onClick={() => this.startGame()} /> :
+                        this.props.squares ?
+                            this.props.squares.map((row) => {
+                                return (
+                                    <Square {...row} />
+                                );
+                            }) :
+                            null
+                    }
+                </div>
+                <NextFigure isGameOver={this.props.isGameOver} nextFigure={this.props.nextFigure} />
             </div>
         );
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('keydown');
     }
 }
 
 function mapStateToProps(state) {
     return {
-        isNewFigure: gameSelectors.getIsNewFigure(state),
+        squares: gameSelectors.getSquares(state),
+        nextFigure: gameSelectors.getNextSquares(state),
+        isGameOver: gameSelectors.getGameStatus(state),
+        speed: gameSelectors.getGameSpeed(state),
     };
 }
 
